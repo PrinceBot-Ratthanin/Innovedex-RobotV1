@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include <Servo.h>
-Servo _servo;
+Servo _servo1;
+Servo _servo2;
 #define Dir1  12
 #define PWM1  10
 #define Dir2  13
@@ -11,7 +12,8 @@ Servo _servo;
 #define _SensorpinD A3
 #define trigPin 8
 #define echoPin 7
-#define servo_pin 9
+#define servo_pin1 A4
+#define servo_pin2 A5
 #define buzzer_pin 4
 void beep(){
 	pinMode(buzzer_pin,OUTPUT);
@@ -67,6 +69,13 @@ double getdistance(){
 		return 52;
 	}
 	
+}
+void wait(){
+	while(getdistance() > 8){
+		beep();
+		delay(100);
+	}
+	beep(1000);
 }
 void begin(){
 	pinMode(Dir1,OUTPUT);
@@ -192,15 +201,30 @@ void servo(uint8_t servo,int16_t angle)
   {
     if (angle==-1)
 	{
-	  _servo.detach();
+	  _servo1.detach();
 	}
 	else
 	{
-      if (!(_servo.attached()))
+      if (!(_servo1.attached()))
 	  {
-		_servo.attach(servo_pin);
+		_servo1.attach(servo_pin1);
 	  }
-	  _servo.write(angle);
+	  _servo1.write(angle);
+	}
+  }
+  if (servo==2)
+  {
+    if (angle==-1)
+	{
+	  _servo2.detach();
+	}
+	else
+	{
+      if (!(_servo2.attached()))
+	  {
+		_servo2.attach(servo_pin2);
+	  }
+	  _servo2.write(angle);
 	}
   }
 }
